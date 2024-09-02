@@ -1,0 +1,84 @@
+# Example Config file from dl-ss-recon repo
+MODEL:
+  MODEL_TYPE: "DiT"   #"RES" for resnet or "SE" for squeeze excitation
+  META_ARCHITECTURE: "DDPM_X" 
+  PARAMETERS:
+    NUM_UNROLLS: 4
+    NUM_RESBLOCKS: 0
+    NUM_SWINBLOCKS: 0
+    NUM_LAYERS: 6
+    NUM_HEADS: 16
+    NUM_FEATURES: 384
+    NUM_EMAPS: 2
+    SHARE_WEIGHTS: False
+    FIX_STEP_SIZE: True
+    SLWIN_INIT: False
+    GRAD_CHECKPOINT: False
+    LEARN_SIGMA: False
+    NOISE_SCHED: "linear" #options: squaredcos_cap_v2, linear
+    CONV_BLOCK:
+      ACTIVATION: "relu"
+      NORM: "none"
+      CIRCULAR_PAD: True
+      COMPLEX: False
+  RECON_LOSS:
+    NAME: "complex_l1"
+    #NAME: "complex_vggloss"
+    RENORMALIZE_DATA: False
+    LOSS_WEIGHT: False
+  STRATEGY: "deepspeed"
+  #STRATEGY: "other"
+
+# Paths to training and validation sets
+DATASET:
+  #TRAIN: ("/mnt/dense/sandino/TorchData/stanfordCine/train",)
+  #VAL: ("/mnt/dense/sandino/TorchData/stanfordCine/validate",)
+  # 1 EMAP
+  # TRAIN: ("/home/tjao/data/stanfordCine/train",)
+  # VAL: ("/home/tjao/data/stanfordCine/validate",)
+  # 2 EMAP
+  TRAIN: ("/home/tjao/data/stanfordCine_2emaps/train",)
+  #TRAIN: ("/home/tjao/data/stanfordCine_2emaps/temp",)
+  VAL: ("/home/tjao/data/stanfordCine_2emaps/validate",)
+DATALOADER:
+  NUM_WORKERS: 12
+  TRAIN_BATCH_SIZE: 1
+  VAL_BATCH_SIZE: 1
+
+# Flags for augmentation on training set
+AUG_TRAIN:
+  CROP_READOUT: 64 # number of readout points to keep
+  UNDERSAMPLE:
+    NAME: VDktMaskFunc
+    #ACCELERATIONS: (10, 15)
+    ACCELERATIONS: (10, 15)
+    PARTIAL_KX: 0.25 # fraction of kx samples to exclude
+    PARTIAL_KY: 0.25 # fraction of ky samples to exclude
+
+# Flags for SGD optimizer
+OPTIMIZER:
+  NAME: "Adam"
+  MAX_EPOCHS: 1000
+  #GRAD_ACCUM_ITERS: 1
+  ADAM:
+    LR: 0.0001
+
+# Flags for validation
+EVAL:
+  RUN_EVERY_N_EPOCHS: 1
+
+# Logger options
+LOGGER:
+  LOG_METRICS_EVERY_N_STEPS: 50
+  LOG_IMAGES_EVERY_N_STEPS: 50
+  LOG_PREDICTION_EVERY_N_STEPS: 261
+
+# Misc options
+SEED: 1000
+# OUTPUT_DIR: "/mnt/dense/sandino/TorchData/stanfordCine/summary/example/train-3D_5steps_2resblocks_64features"
+# OUTPUT_DIR: "/home/tjao/data/stanfordCine_2emaps/summary/example/train-3D_5steps_2SEblocks_64features_2emaps_0weight"
+#OUTPUT_DIR: "/home/tjao/data/stanfordCine_2emaps/summary/example/fake_test"
+#OUTPUT_DIR: "/home/tjao/data/stanfordCine_2emaps/summary/train-3D_4steps_4RESblocks_180features_2emaps_0weight"
+OUTPUT_DIR: "/home/tjao/data/stanfordCine_2emaps/DiT/DDPM_X_4steps_6DiTblock_16Heads_384features_FS"
+#OUTPUT_DIR: "/home/tjao/data/stanfordCine_2emaps/DiT/train_4steps_12DiTblock_192features_DDPMloss"
+VERSION: 1

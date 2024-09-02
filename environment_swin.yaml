@@ -1,0 +1,21 @@
+name: dl-cs-swin
+channels:
+  - conda-forge
+  - defaults
+  - pytorch
+  - iopath
+dependencies:
+  - python=3.8.10
+  - pytorch=1.9.0
+  - torchvision=0.10.0
+  - cudatoolkit=11.1
+  - pytorch-lightning
+  - matplotlib
+  - scipy
+  - h5py
+  - pyyaml
+  - flit
+  - fvcore
+  - iopath
+  - moviepy
+  - timm

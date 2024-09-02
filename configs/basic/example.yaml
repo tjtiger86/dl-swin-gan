@@ -1,0 +1,60 @@
+# Example Config file from dl-ss-recon repo
+MODEL:
+  META_ARCHITECTURE: "dlespirit"
+  PARAMETERS:
+    NUM_UNROLLS: 5
+    NUM_RESBLOCKS: 2
+    NUM_FEATURES: 64
+    NUM_EMAPS: 2
+    SHARE_WEIGHTS: False
+    FIX_STEP_SIZE: True
+    SLWIN_INIT: True
+    GRAD_CHECKPOINT: False
+    CONV_BLOCK:
+      ACTIVATION: "relu"
+      NORM: "none"
+      CIRCULAR_PAD: True
+      COMPLEX: False
+  RECON_LOSS:
+    NAME: "complex_l1"
+    RENORMALIZE_DATA: False
+
+# Paths to training and validation sets
+DATASET:
+  TRAIN: ("/mnt/dense/sandino/TorchData/stanfordCine/train",)
+  VAL: ("/mnt/dense/sandino/TorchData/stanfordCine/validate",)
+
+DATALOADER:
+  TRAIN_BATCH_SIZE: 1
+  VAL_BATCH_SIZE: 1
+
+# Flags for augmentation on training set
+AUG_TRAIN:
+  CROP_READOUT: 64 # number of readout points to keep
+  UNDERSAMPLE:
+    NAME: VDktMaskFunc
+    ACCELERATIONS: (10, 15)
+    PARTIAL_KX: 0.25 # fraction of kx samples to exclude
+    PARTIAL_KY: 0.25 # fraction of ky samples to exclude
+
+# Flags for SGD optimizer
+OPTIMIZER:
+  NAME: "Adam"
+  MAX_EPOCHS: 1000
+  GRAD_ACCUM_ITERS: 1
+  ADAM:
+    LR: 0.0001
+
+# Flags for validation
+EVAL:
+  RUN_EVERY_N_EPOCHS: 1
+
+# Logger options
+LOGGER:
+  LOG_METRICS_EVERY_N_STEPS: 50
+  LOG_IMAGES_EVERY_N_STEPS: 50
+
+# Misc options
+SEED: 1000
+OUTPUT_DIR: "/mnt/dense/sandino/TorchData/stanfordCine/summary/example/train-3D_5steps_2resblocks_64features"
+VERSION: 1
