@@ -422,8 +422,9 @@ class SwinTransformer3DNet(nn.Module):
         x = self._preprocess(x)
 
         x = self.SFE(x)
+        res = x 
         #print("size of output after SFE is {}".format(output.size()))
-        x = self.DFE(x)
+        x = res + self.DFE(x)
         #print("size of output after DFE is {}".format(output.size()))
         x = self.final_layer(x)
         #x = self.fl(x)

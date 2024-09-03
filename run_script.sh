@@ -26,7 +26,7 @@ data_directory="/home/tjao/data/stanfordCine_${num_emaps}emaps/validate"
 ckpt_directory=$root_dir"stanfordCine_${num_emaps}emaps/Latte/DDPM_X_1steps_12DiTblock_6Heads_192features_4Patch_FS/"
 
 
-model_type="Latte" #RES or SE or CBAM or SWIN or DIT or Latte
+model_type="SWINGAN" #RES or SE or CBAM or SWIN or DIT or Latte
 acceleration=1
 
 #Setting the config file
@@ -42,7 +42,12 @@ else
     then
       config_file="/home/tjao/code/dl-diff/configs/config_latte.yaml"
     else
+      if [[ "$model_type" == "SWINGAN" ]]
+      then
+        config_file="/home/tjao/code/dl-swin-gan/configs/config_swingan.yaml"
+      else
       config_file="/home/tjao/code/dl-cs-dynamic/configs/config_se.yaml"
+      fi
     fi
   fi
 fi 
@@ -133,6 +138,19 @@ then
         python3 scripts/train_Latte.py --config-file $config_file --device 0
       else
         python3 scripts/train_Latte.py --config-file $config_file --device 0 --resume --ckpt $ckpt_file
+      fi
+    fi
+
+    #SWINGAN Training
+    if [[ "$model_type" == "SWINGAN" ]]
+    then
+      echo "Swin-Gan"
+
+      if [[ $recon_ckpt -eq 0 ]]
+      then
+        python3 scripts/train_swin_gan.py --config-file $config_file --device 0
+      else
+        python3 scripts/train_swin_gan.py --config-file $config_file --device 0 --resume --ckpt $ckpt_file
       fi
     fi
 

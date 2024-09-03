@@ -8,7 +8,7 @@ import torch
 from torch import nn
 import torch.utils.checkpoint as cp
 
-from dl_cs.models.DiT import DitNet
+from dl_cs.models.swin3D import SwinTransformer3DNet
 from dl_cs.mri.algorithms import ConjugateGradient
 
 
@@ -46,7 +46,7 @@ class UnrolledSwinNet(nn.Module):
         in_chans = self.num_emaps if self.use_complex_layers else 2 * self.num_emaps
 
         # Read in network parameters
-        dit_params = dict(in_chans=in_chans,
+        swin_params = dict(in_chans=in_chans,
                              chans=self.num_features,
                              num_swinblocks=self.num_swinblocks,
                              use_complex_layers=self.use_complex_layers,
@@ -60,10 +60,10 @@ class UnrolledSwinNet(nn.Module):
         # Declare CNNs for each unrolled iteration
         if self.share_weights:
             # Initializes copies of the same network
-            nets = nn.ModuleList([DitNet(**dit_params)] * self.num_unrolls)
+            nets = nn.ModuleList([SwinTransformer3DNet(**swin_params)] * self.num_unrolls)
         else:
             # Initializes unique networks
-            nets = nn.ModuleList([DitNet(**dit_params) for _ in range(self.num_unrolls)])
+            nets = nn.ModuleList([SwinTransformer3DNet(**swin_params) for _ in range(self.num_unrolls)])
 
         return nets
 

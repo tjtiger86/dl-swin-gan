@@ -64,9 +64,9 @@ _C.MODEL.PARAMETERS.DSLR.NUM_CG_STEPS = 10
 
 
 #SWIN specific Parameters
-#_C.MODEL.PARAMETERS.WINDOW_SIZE = (4, 4) #Patch size 
-#_C.MODEL.PARAMETERS.NUM_HEAD = (4) #reduction ratio for squeeze excitation block
-#_C.MODEL.PARAMETERS.NUM_LAYERS = (4)
+_C.MODEL.PARAMETERS.WINDOW_SIZE = (4, 4) #Patch size 
+_C.MODEL.PARAMETERS.NUM_HEAD = (4) #reduction ratio for squeeze excitation block
+_C.MODEL.PARAMETERS.NUM_LAYERS = (4)
 
 # Conv block parameters
 _C.MODEL.PARAMETERS.CONV_BLOCK = CN()
