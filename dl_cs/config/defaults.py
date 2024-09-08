@@ -38,6 +38,7 @@ _C.MODEL.PARAMETERS.RR = 16 #reduction ratio for squeeze excitation block
 _C.MODEL.PARAMETERS.NUM_FEATURES = 256
 _C.MODEL.PARAMETERS.DROPOUT = 0.0
 _C.MODEL.PARAMETERS.NUM_EMAPS = 2
+_C.MODEL.PARAMETERS.NUM_COILS = 8
 
 # Diffusion-specific flags
 _C.MODEL.PARAMETERS.NOISE_SCHED = "linear"
@@ -117,6 +118,7 @@ _C.DATALOADER.SUBSAMPLE = 1.0
 # -----------------------------------------------------------------------------
 _C.AUG_TRAIN = CN()
 _C.AUG_TRAIN.CROP_READOUT = 64
+_C.AUG_TRAIN.ZPAD_PE = 0 #misnomer, should be CROP_PE, but lazy to rename
 _C.AUG_TRAIN.UNDERSAMPLE = CN()
 _C.AUG_TRAIN.UNDERSAMPLE.NAME = "VDktMaskFunc"
 _C.AUG_TRAIN.UNDERSAMPLE.ACCELERATIONS = (10, 15)

@@ -82,6 +82,27 @@ class CinePreprocess(Preprocess):
             maps = maps[..., start_x:end_x]
             target = target[..., start_x:end_x]
 
+        # Crop along the phase encode dimension
+        crop_size_y = self.config.AUG_TRAIN.ZPAD_PE
+        if crop_size_y > 0:
+            # First pick a random center about which to crop
+            shape_y = multicoil_images.shape[-2]
+            mean_y = shape_y // 2 + 1
+            std_y = crop_size_y // 2
+            crop_center_y = int(self.rng.normal(loc=mean_y, scale=std_y))
+
+            # Clip center so that crop indices don't over-range
+            min_y = crop_size_y // 2
+            max_y = shape_y - crop_size_y // 2 - 1
+            crop_center_y = np.clip(crop_center_y, a_min=min_y, a_max=max_y)
+
+            # Crop data
+            start_y = crop_center_y - crop_size_y//2 + 1
+            end_y = start_y + crop_size_y
+            multicoil_images = multicoil_images[..., start_y:end_y,:]
+            maps = maps[..., start_y:end_y,:]
+            target = target[..., start_y:end_y,:]
+
         # Random flips across readout
         if self.rng.rand() > 0.5:
             multicoil_images = torch.flip(multicoil_images, dims=(-1,))
